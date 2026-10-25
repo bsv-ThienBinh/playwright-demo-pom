@@ -46,6 +46,7 @@ class TestTicket:
     @allure.title("GD03.1-03: Dialog")
     def test_gd03_1_03_cancel_delete_ticket(self, open_ticket_page):
         open_ticket_page.cancel_delete_ticket("T-1001")
+        ###NNTT: đối với các giá trị sử dụng như "T-1001" thì nên define trong test-data/constants.py để tránh việc hardcode trong testcase
         expect(open_ticket_page.ticket_rows()).to_have_count(10)
         expect(open_ticket_page.page.get_by_text("T-1001")).to_be_visible()
 
@@ -60,6 +61,7 @@ class TestTicket:
         _SAMPLE_PNG.write_bytes(b"\x89PNG\r\n\x1a\n" + b"\x00" * (1024 * 1024 - 8))
         open_ticket_page.open_ticket_detail("T-1001")
         open_ticket_page.upload_attachment(str(_SAMPLE_PNG))
+        ###NNTT: chỗ này không có vấn đề nếu test-data.png để sẵn file, nhưng có thể suy nghĩ thử theo hướng tạo dummy file để testcase chạy được nhanh hơn.
         expect(open_ticket_page.uploaded_file_name()).to_have_text("sample.png（1024KB）")
         expect(open_ticket_page.remove_file_button()).to_be_visible()
 
@@ -73,7 +75,9 @@ class TestTicket:
         open_ticket_page.apply_iframe_status("対応中")
         expect(open_ticket_page.iframe_result()).to_have_text(IFRAME_STATUS_UPDATED)
         expect(open_ticket_page.ticket_rows()).to_have_count(10)
-        expect(open_ticket_page.page.locator("#ticket_tbody")).not_to_contain_text("画面外には反映されません")     
+        expect(open_ticket_page.page.locator("#ticket_tbody")).not_to_contain_text("画面外には反映されません")
+        ###NNTT: đối với các giá trị sử dụng như "画面外には反映されません" thì nên define trong test-data/messages.py để tránh việc hardcode trong testcase
+    
 
     @allure.title("Others_07: Browser zoom")
     def test_others_07_browser_zoom(self, open_ticket_page):
